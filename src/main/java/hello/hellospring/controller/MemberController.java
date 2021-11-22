@@ -18,7 +18,9 @@ public class MemberController {
     // @Autowired를 통한 DI는 스프링이 관리하는 객체에서만 동작한다. 스프링 빈으로 등록하지 않고 내가 직접 생성한 객체에서는 동작하지 않는다.
     @Autowired  // 생성자 주입
     public MemberController(MemberService memberService) {
+
         this.memberService = memberService;
+        System.out.println("memberService = "+memberService.getClass());
     }
 
     @GetMapping("/members/new")
