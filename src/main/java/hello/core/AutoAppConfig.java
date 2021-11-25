@@ -1,5 +1,8 @@
 package hello.core;
 
+import hello.core.member.MemberRepository;
+import hello.core.member.MemoryMemberRepository;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
@@ -14,5 +17,13 @@ import org.springframework.context.annotation.FilterType;
         excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Configuration.class)
 )
 public class AutoAppConfig {
-
+    // 수동 빈 등록 --> 수동 빈 vs 자동 빈 : 수동 빈이 자동 빈을 오버라이딩 한다(수동 빈이 우선권을 가짐)
+    // 하지만 스프링 부트에서는 수동 빈 등록과 자동 빈 등록이 충돌나면 오류가 발생하도록 기본 값을 바꾸었다.
+    // 수동 빈 등록, 자동 빈 등록 충돌(오류)시 스프링 부트 에러
+    // 에러 메시지 : 'Consider renaming one of the beans or enabling overriding by setting spring.main.allow-bean-definition-overriding =true'
+    // 기본 값은 false
+    @Bean(name = "memoryMemberRepository")
+    public MemberRepository memberRepository(){
+        return new MemoryMemberRepository();
+    }
 }
