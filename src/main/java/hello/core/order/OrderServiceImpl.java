@@ -16,8 +16,14 @@ public class OrderServiceImpl implements OrderService{
     private final MemberRepository memberRepository;
     private final DiscountPolicy discountPolicy;
 
-    @Autowired  // 생성자 주입 : 생성자 호출시점에 딱 1번만 호출되는 것이 보장된다.
-                // 불변, 필수 의존관계에 사용
+     // 생성자 주입 : 생성자 호출시점에 딱 1번만 호출되는 것이 보장된다.
+//    @Autowired
+//    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+//        this.memberRepository = memberRepository;
+//        this.discountPolicy = discountPolicy;
+//    }
+
+    // 불변, 필수 의존관계에 사용
                 // *생성자가 딱 1개만 있으면 @Autowired를 생략해도 자동 주입 된다. 단, 스프링 빈에만 해당한다.
     // 생성자 주입을 선택하는 이유 :
         //  - 대부분의 의존관계 주입은 한번 일어나면 애플리케이션 종료시점까지 의존관계를 변경할 일이 없다. 오히려 대부분의 의존관계는 애플리케이션 종료 전까지 변하면 안된다.
