@@ -22,8 +22,8 @@ public class AutoAppConfig {
     // 수동 빈 등록, 자동 빈 등록 충돌(오류)시 스프링 부트 에러
     // 에러 메시지 : 'Consider renaming one of the beans or enabling overriding by setting spring.main.allow-bean-definition-overriding =true'
     // 기본 값은 false
-    @Bean(name = "memoryMemberRepository")
-    public MemberRepository memberRepository(){
-        return new MemoryMemberRepository();
-    }
+//    @Bean(name = "memoryMemberRepository")
+//    public MemberRepository memberRepository(){
+//        return new MemoryMemberRepository();
+//    }
 }
