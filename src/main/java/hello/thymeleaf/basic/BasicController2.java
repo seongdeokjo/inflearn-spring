@@ -1,7 +1,6 @@
 package hello.thymeleaf.basic;
 
 import lombok.Data;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,15 +15,15 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/basic")
-public class BasicController {
+public class BasicController2 {
 
-    @GetMapping("text-basic")
+    @GetMapping("/text-basic")
     public String textBasic(Model model) {
         model.addAttribute("data", "hello spring");
         return "basic/text-basic";
     }
 
-    @GetMapping("text-unescaped")
+    @GetMapping("/text-unescaped")
     public String textUnescaped(Model model) {
         model.addAttribute("data", "hello <b>spring</b>");
         return "basic/text-unescaped";
@@ -56,17 +55,17 @@ public class BasicController {
         return "basic/basic-objects";
     }
 
-    @Component("helloBean")
-    static class HelloBean{
-        public String hello(String data){
-            return "hello" + data;
-        }
-    }
-
-    @GetMapping("/data")
-    public String data(Model model){
+    @GetMapping("/date")
+    public String date(Model model){
         model.addAttribute("localDateTime", LocalDateTime.now());
         return "basic/date";
+    }
+
+    @GetMapping("/link")
+    public String urlLink(Model model){
+        model.addAttribute("param1", "data1");
+        model.addAttribute("param2", "data2");
+        return "basic/link";
     }
 
     @Data
@@ -79,4 +78,11 @@ public class BasicController {
             this.age = age;
         }
     }
+
+//    @Component("helloBean")
+//    static class HelloBean{
+//        public String hello(String data){
+//            return "hello" + data;
+//        }
+//    }
 }
