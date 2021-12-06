@@ -82,6 +82,11 @@ public class BasicController2 {
         return "basic/operation";
     }
 
+    @GetMapping("/attributes")
+    public String attribute(){
+        return "basic/attribute";
+    }
+
     @Data
     static class User {
         private String username;
