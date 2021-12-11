@@ -30,7 +30,7 @@ public class LogInterceptor implements HandlerInterceptor {
         }
 
         log.info("REQUEST [{}] [{}] [{}]",uuid,requestURI,handler);
-        return false;
+        return true;
     }
 
     @Override
