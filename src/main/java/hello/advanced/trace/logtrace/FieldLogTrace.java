@@ -1,31 +1,41 @@
-package hello.advanced.hellotrace;
+package hello.advanced.trace.logtrace;
 
 import hello.advanced.trace.TraceId;
 import hello.advanced.trace.TraceStatus;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
 
 @Slf4j
-@Component
-public class HelloTraceV1 {
-
+public class FieldLogTrace implements LogTrace {
     private static final String START_PREFIX = "-->";
     private static final String COMPLETE_PREFIX = "<--";
     private static final String EX_PREFIX = "<X-";
+    
+    private TraceId traceIdHolder; // traceId 동기화, 동시성 이슈 발생
 
+    @Override
     public TraceStatus begin(String message) {
-        TraceId traceId = new TraceId();
+        syncTraceId();
+        TraceId traceId = traceIdHolder;
         long startTimeMs = System.currentTimeMillis();
         // 로그 출력
         log.info("[{}] {}{}", traceId.getId(), addSpace(START_PREFIX, traceId.getLevel()), message);
         return new TraceStatus(traceId, startTimeMs, message);
     }
 
+    private void syncTraceId(){
+        if (traceIdHolder == null) {
+            traceIdHolder = new TraceId();
+        }else{
+            traceIdHolder = traceIdHolder.createNextId();
+        }
+    }
+
+    @Override
     public void end(TraceStatus status) {
         complete(status, null);
     }
 
+    @Override
     public void exception(TraceStatus status, Exception e) {
         complete(status, e);
     }
@@ -43,6 +53,15 @@ public class HelloTraceV1 {
                     addSpace(EX_PREFIX, traceId.getLevel()), status.getMessage(), resultTimeMs,
                     e.toString());
         }
+        releaseTraceId();
+    }
+
+    private void releaseTraceId() {
+        if (traceIdHolder.isFirstLevel()) {
+            traceIdHolder = null; // destroy
+        }else{
+            traceIdHolder = traceIdHolder.createPreviousId();
+        }
     }
 
     private static String addSpace(String prefix, int level) {
@@ -52,7 +71,4 @@ public class HelloTraceV1 {
         }
         return sb.toString();
     }
-
-
 }
-
