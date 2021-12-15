@@ -1,6 +1,7 @@
 package hello.advanced.trace.strategy;
 
 import hello.advanced.trace.strategy.code.strategy.ContextV1;
+import hello.advanced.trace.strategy.code.strategy.Strategy;
 import hello.advanced.trace.strategy.code.strategy.StrategyLogic1;
 import hello.advanced.trace.strategy.code.strategy.StrategyLogic2;
 import hello.advanced.trace.template.code.AbstractTemplate;
@@ -74,7 +75,6 @@ public class ContextV1Test {
         template2.execute();
     }
 
-
     /**
      * 전략 패턴 사용
      */
@@ -87,5 +87,65 @@ public class ContextV1Test {
         StrategyLogic2 strategyLogic2 = new StrategyLogic2();
         ContextV1 context2 = new ContextV1(strategyLogic2);
         context2.execute();
+    }
+
+    /**
+     * 익명 내부 클래스 사용1
+     */
+    @Test
+    void strategyV2(){
+        Strategy strategy_logic1 = new Strategy() {
+            @Override
+            public void call() {
+                log.info("비즈니스 로직1 실행");
+            }
+        };
+        ContextV1 context1 = new ContextV1(strategy_logic1);
+        log.info("strategy_logic1={}",strategy_logic1.getClass());
+        context1.execute();
+
+        Strategy strategy_logic2 = new Strategy() {
+            @Override
+            public void call() {
+                log.info("비즈니스 로직2 실행");
+            }
+        };
+        ContextV1 context2 = new ContextV1(strategy_logic2);
+        log.info("strategy_logic2={}",strategy_logic2.getClass());
+        context1.execute();
+    }
+
+    /**
+     * 익명 내부 클래스 사용2 - 익명 내부 클래스를 변수에 담아두지 말고, 생성하면서 바로 전달
+     */
+    @Test
+    void strategyV3(){
+        ContextV1 context1 = new ContextV1(new Strategy() {
+            @Override
+            public void call() {
+                log.info("비즈니스 로직1 실행");
+            }
+        });
+        context1.execute();
+
+        ContextV1 context2 = new ContextV1( new Strategy() {
+            @Override
+            public void call() {
+                log.info("비즈니스 로직2 실행");
+            }
+        });
+        context1.execute();
+    }
+
+    /**
+     * 익명 내부 클래스 사용3 - 람다 사용
+     */
+    @Test
+    void strategyV4(){
+        ContextV1 context1 = new ContextV1(() -> log.info("비즈니스 로직1 실행"));
+        context1.execute();
+
+        ContextV1 context2 = new ContextV1(() -> log.info("비즈니스 로직2 실행"));
+        context1.execute();
     }
 }
