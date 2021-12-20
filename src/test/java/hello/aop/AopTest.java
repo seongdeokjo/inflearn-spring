@@ -18,7 +18,8 @@ import static org.assertj.core.api.Assertions.*;
 //@Import(AspectV2.class)
 //@Import(AspectV3.class)
 //@Import(AspectV4Poincut.class)
-@Import({AspectV5Order.LogAspect.class, AspectV5Order.TxAspect.class})
+//@Import({AspectV5Order.LogAspect.class, AspectV5Order.TxAspect.class})
+@Import(AspectV6Advice.class)
 public class AopTest {
 
     @Autowired
@@ -28,18 +29,18 @@ public class AopTest {
     OrderRepository orderRepository;
 
     @Test
-    void aopInfo(){
+    void aopInfo() {
         log.info("isAopProxy, orderService={}", AopUtils.isAopProxy(orderService));
         log.info("isAopProxy, orderRepository={}", AopUtils.isAopProxy(orderRepository));
     }
 
     @Test
-    void success(){
+    void success() {
         orderService.orderItem("itemA");
     }
 
     @Test
-    void exception(){
+    void exception() {
         assertThatThrownBy(() -> orderService.orderItem("ex"))
                 .isInstanceOf(IllegalStateException.class);
     }
